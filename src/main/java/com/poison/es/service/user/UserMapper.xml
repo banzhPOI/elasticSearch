@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- user -->
+<mapper namespace="com.poison.es.service.user.UserMapper">
+    <!-- 结果映射 -->
+    <resultMap id="baseResultMap" type="com.poison.es.domain.User">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="USERNAME" property="username" jdbcType="VARCHAR"/>
+        <result column="PASSWORD" property="password" jdbcType="INTEGER"/>
+    </resultMap>
+    <!-- 表所有字段 -->
+    <sql id="allColumns">
+        ID, USERNAME, PASSWORD
+    </sql>
+    <!--查询数据列表-->
+    <select id="findAll" resultMap="baseResultMap">
+        SELECT ID, USERNAME FROM `user`
+    </select>
+    <!--根据用户名查询详情-->
+    <select id="findByUsername" resultMap="baseResultMap">
+        SELECT ID, USERNAME, PASSWORD FROM `user`
+        WHERE USERNAME = #{username}
+    </select>
+    <!--新增用户-->
+    <insert id="addUser" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user` (<include refid="allColumns" />)
+        VALUES (
+        #{id},
+        #{username},
+        #{password}
+        )
+    </insert>
+
+</mapper>
