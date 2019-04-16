@@ -3,14 +3,16 @@ package com.poison.es.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
 @ToString
-
-public class User {
+@Document(indexName="esuser",type="user")
+public class User implements Serializable {
     private Long id;
     private String username;
     private String password;
