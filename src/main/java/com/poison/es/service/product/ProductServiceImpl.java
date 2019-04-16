@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void addUser(Product product) {
+    public void addProduct(Product product) {
         productMapper.addProduct(product);
         ProductES productES = makeESInfo(product);
         productSearch.save(productES);

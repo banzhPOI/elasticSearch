@@ -8,5 +8,5 @@ public interface ProductService {
 
     List<Product> findAllProducts();
 
-    void addUser(Product product);
+    void addProduct(Product product);
 }

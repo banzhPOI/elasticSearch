@@ -19,15 +19,15 @@ public class ProductController {
 
     //获取列表
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Response<?> findAllUsers() {
+    public Response<?> findAllProducts() {
         List<Product> products = productService.findAllProducts();
         return ResponseHelper.createSuccessResponse(products);
     }
 
-    //新增用户
+    //新增
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public Response<?> addUser(@RequestBody Product product) {
-        productService.addUser(product);
+    public Response<?> addProduct(@RequestBody Product product) {
+        productService.addProduct(product);
         return ResponseHelper.createSuccessResponse();
     }
 
