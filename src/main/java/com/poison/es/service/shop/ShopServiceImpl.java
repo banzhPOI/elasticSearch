@@ -17,4 +17,10 @@ public class ShopServiceImpl implements ShopService {
     public void addShop(Shop shop) {
         shopMapper.addShop(shop);
     }
+
+    @Override
+    public Shop findShopById(Long id){
+        Shop shop=shopMapper.findShopById(id);
+        return shop;
+    }
 }

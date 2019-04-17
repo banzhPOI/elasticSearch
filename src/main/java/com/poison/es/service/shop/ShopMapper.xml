@@ -25,4 +25,9 @@
         now()
         )
     </insert>
+    <!--详情-->
+    <select id="findShopById" resultMap="baseResultMap">
+        SELECT <include refid="allColumns" />
+        FROM shop WHERE ID = #{id}
+    </select>
 </mapper>

@@ -8,4 +8,6 @@ import java.util.List;
 public interface ShopService {
 
     void addShop(Shop shop);
+
+    Shop findShopById(Long id);
 }
