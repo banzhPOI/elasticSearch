@@ -17,10 +17,10 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    //获取列表
+    //模糊查询获取列表
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Response<?> findAllProducts() {
-        List<Product> products = productService.findAllProducts();
+    public Response<?> findAllProducts(String filter) {
+        List<Product> products = productService.findAllProducts(filter);
         return ResponseHelper.createSuccessResponse(products);
     }
 
