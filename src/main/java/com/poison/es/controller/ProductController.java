@@ -31,4 +31,10 @@ public class ProductController {
         return ResponseHelper.createSuccessResponse();
     }
 
+    //根据店铺id获取列表
+    @RequestMapping(value = "shops/{shopId}", method = RequestMethod.GET)
+    public Response<?> findProductsByShopId(@PathVariable Long shopId) {
+        List<Product> products = productService.findProductsByShopId(shopId);
+        return ResponseHelper.createSuccessResponse(products);
+    }
 }

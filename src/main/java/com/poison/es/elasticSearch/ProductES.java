@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Parent;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,9 +13,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Document(indexName="product",type="product")
+@Document(indexName="es",type="product")
 public class ProductES implements Serializable {
-    private Long id;
+    @Parent(type = "shopProduct")
+    private String id;
     private String name;
     private String description;
 }

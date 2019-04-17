@@ -4,7 +4,12 @@ import com.google.common.collect.Lists;
 import com.poison.es.domain.Product;
 import com.poison.es.elasticSearch.ProductES;
 import com.poison.es.elasticSearch.ProductSearch;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.join.query.JoinQueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
         List<Long> ids = new ArrayList<>();
         Iterator<ProductES> it = iterable.iterator();
         while (it.hasNext()) {
-            Long id = it.next().getId();
+            Long id = Long.valueOf(it.next().getId());
             ids.add(id);
         }
         return ids;
@@ -49,9 +54,16 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductES makeESInfo(Product product) {
         ProductES productES = new ProductES();
-        productES.setId(product.getId());
+        productES.setId(String.valueOf(product.getId()));
         productES.setName(product.getName());
         productES.setDescription(product.getDescription());
         return productES;
+    }
+
+    @Override
+    public List<Product> findProductsByShopId(Long shopId){
+        //只用es关联查出列表
+        List<Product>products=new ArrayList<>();
+        return products;
     }
 }

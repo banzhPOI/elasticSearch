@@ -26,8 +26,8 @@ public class ShopProductServiceImpl implements ShopProductService {
 
     private ShopProductES makeEsInfo(ShopProduct shopProduct) {
         ShopProductES shopProductES=new ShopProductES();
-        shopProductES.setProductId(shopProduct.getProductId());
-        shopProductES.setShopId(shopProduct.getShopId());
+        shopProductES.setProductId(String.valueOf(shopProduct.getProductId()));
+        shopProductES.setShopId(String.valueOf(shopProduct.getShopId()));
         return shopProductES;
     }
 }
