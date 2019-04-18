@@ -11,6 +11,7 @@
     <groupId>com.poison</groupId>
     <artifactId>es</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>es</name>
     <description>Demo project for ES</description>
 
