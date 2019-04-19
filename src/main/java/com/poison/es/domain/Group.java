@@ -10,12 +10,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Shop {
+public class Group {
     private Long id;
     private String name;
     private String description;
-    private String logo;
-    private Long groupId;
     private Date creationTime;
     private Integer deleted;
 }
