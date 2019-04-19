@@ -14,10 +14,10 @@ import java.io.Serializable;
 @Getter
 @Setter
 @ToString
-@Document(indexName="es",type="shopProduct")
-public class ShopProductES implements Serializable {
+@Document(indexName="es",type="productGroup")
+public class ProductGroupES implements Serializable {
     @Id
-    private String shopId;
+    private String groupId;
     @Parent(type = "product")
     private String productId;
 }

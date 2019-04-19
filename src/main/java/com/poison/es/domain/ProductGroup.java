@@ -5,14 +5,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Getter
 @Setter
 @ToString
-public class ShopProduct {
+public class ProductGroup {
 
-    private Long shopId;
+    private Long groupId;
     private Long productId;
     private BigDecimal price;
+    private String remark;
 }

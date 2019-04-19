@@ -29,8 +29,17 @@
 
     <!--列表-->
     <select id="findAllTypes" resultMap="baseResultMap">
-        SELECT <include refid="allColumns" />
+        SELECT
+        <include refid="allColumns"/>
         FROM `type` WHERE DELETED = 0
         ORDER BY CREATION_TIME DESC
+    </select>
+
+    <!--详情-->
+    <select id="findTypeById" resultMap="baseResultMap">
+        SELECT
+        <include refid="allColumns"/>
+        FROM `type`
+        WHERE DELETED = 0 AND ID = #{id}
     </select>
 </mapper>

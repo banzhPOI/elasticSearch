@@ -1,10 +1,16 @@
 package com.poison.es.service.product;
 
+import com.poison.es.common.error.CodeException;
 import com.poison.es.domain.Product;
+import com.poison.es.domain.ProductGroup;
+import com.poison.es.domain.Type;
 import com.poison.es.elasticSearch.ProductES;
+import com.poison.es.elasticSearch.ProductGroupES;
+import com.poison.es.elasticSearch.ProductGroupSearch;
 import com.poison.es.elasticSearch.ProductSearch;
+import com.poison.es.service.productGroup.ProductGroupMapper;
+import com.poison.es.service.type.TypeMapper;
 import org.apache.lucene.search.join.ScoreMode;
-import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.join.query.JoinQueryBuilders;
@@ -30,6 +36,12 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapper productMapper;
     @Autowired
     private ProductSearch productSearch;
+    @Autowired
+    private TypeMapper typeMapper;
+    @Autowired
+    private ProductGroupMapper productGroupMapper;
+    @Autowired
+    private ProductGroupSearch productGroupSearch;
 
     @Override
     public List<Product> findAllProducts(String filter) {
@@ -54,12 +66,57 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void addProduct(Product product) {
+        //查询分组是否存在
+        hasType(product);
+        //商品存数据库
         productMapper.addProduct(product);
-        ProductES productES = makeESInfo(product);
+        //分组商品价格
+        saveProductGroup(product);
+        //存es
+        saveProductES(product);
+    }
+
+    private void saveProductES(Product product) {
+        ProductES productES = makeProductESInfo(product);
         productSearch.save(productES);
     }
 
-    private ProductES makeESInfo(Product product) {
+    private void saveProductGroup(Product product) {
+        List<ProductGroup> productGroups = product.getProductGroups();
+        for (ProductGroup productGroup : productGroups) {
+            productGroup.setProductId(product.getId());
+        }
+        productGroupMapper.addProductGroups(productGroups);
+        //存es
+        saveProductGroupES(productGroups);
+    }
+
+    private void saveProductGroupES(List<ProductGroup> productGroups) {
+        List<ProductGroupES> productGroupESs = makeProductGroupESsInfo(productGroups);
+        productGroupSearch.saveAll(productGroupESs);
+    }
+
+    private List<ProductGroupES> makeProductGroupESsInfo(List<ProductGroup> productGroups) {
+        List<ProductGroupES> productGroupESs = new ArrayList<>();
+        for (ProductGroup productGroup : productGroups) {
+            ProductGroupES productGroupES = new ProductGroupES();
+            productGroupES.setProductId(String.valueOf(productGroup.getProductId()));
+            productGroupES.setGroupId(String.valueOf(productGroup.getGroupId()));
+            productGroupESs.add(productGroupES);
+        }
+        return productGroupESs;
+    }
+
+
+    private void hasType(Product product) {
+        Long typeId = product.getTypeId();
+        Type type = typeMapper.findTypeById(typeId);
+        if (type == null) {
+            throw new CodeException(-1, "品类不存在或已被删除");
+        }
+    }
+
+    private ProductES makeProductESInfo(Product product) {
         ProductES productES = new ProductES();
         productES.setId(String.valueOf(product.getId()));
         productES.setName(product.getName());
@@ -69,27 +126,27 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findProductsByShopId(Long shopId) {
-        QueryBuilder queryBuilder = JoinQueryBuilders.hasChildQuery("shopProduct", QueryBuilders.matchQuery("shopId", shopId), ScoreMode.Max);
+        QueryBuilder queryBuilder = JoinQueryBuilders.hasChildQuery("productGroup", QueryBuilders.matchQuery("shopId", shopId), ScoreMode.Max);
         Pageable pageable = PageRequest.of(0, 10);
         SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).withPageable(pageable).build();
         searchQuery.addIndices("es");
         searchQuery.addTypes("product");
         Page<ProductES> page = productSearch.search(searchQuery);
-        List<Product>products=makeProductInfo(page);
+        List<Product> products = makeProductInfo(page);
         //只用es关联查出列表
         return products;
     }
 
     private List<Product> makeProductInfo(Page<ProductES> page) {
-        List<Product>products=new ArrayList<>();
-        List<ProductES>productESs=page.getContent();
-        List<Long>ids=new ArrayList<>();
-        for (ProductES productES:productESs) {
-            Long id= Long.valueOf(productES.getId());
+        List<Product> products = new ArrayList<>();
+        List<ProductES> productESs = page.getContent();
+        List<Long> ids = new ArrayList<>();
+        for (ProductES productES : productESs) {
+            Long id = Long.valueOf(productES.getId());
             ids.add(id);
         }
-        if (ids.size()!=0){
-            products=productMapper.findByIds(ids);
+        if (ids.size() != 0) {
+            products = productMapper.findByIds(ids);
         }
         return products;
     }

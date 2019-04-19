@@ -17,5 +17,7 @@ public class Product {
     private String description;
     private List<String> pictures;
     private Long typeId;
+    private List<ProductGroup> productGroups;
     private Date creationTime;
+    private Integer deleted;
 }

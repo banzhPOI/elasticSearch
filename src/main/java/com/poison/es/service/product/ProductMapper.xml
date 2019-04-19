@@ -7,11 +7,13 @@
         <id column="ID" property="id" jdbcType="BIGINT"/>
         <result column="NAME" property="name" jdbcType="VARCHAR"/>
         <result column="DESCRIPTION" property="description" jdbcType="VARCHAR"/>
+        <result column="TYPE_ID" property="typeId" jdbcType="INTEGER"/>
         <result column="CREATION_TIME" property="creationTime" jdbcType="TIMESTAMP"/>
+        <result column="DELETED" property="deleted" jdbcType="INTEGER"/>
     </resultMap>
     <!-- 表所有字段 -->
     <sql id="allColumns">
-        ID, NAME, DESCRIPTION,CREATION_TIME
+        ID, `NAME`, DESCRIPTION, TYPE_ID, CREATION_TIME, DELETED
     </sql>
     <!--查询数据列表-->
     <select id="findAll" resultMap="baseResultMap">
@@ -24,7 +26,9 @@
         #{id},
         #{name},
         #{description},
-        now()
+        #{typeId},
+        now(),
+        0
         )
     </insert>
     <!-- 批量查找 -->
