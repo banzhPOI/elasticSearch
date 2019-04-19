@@ -8,11 +8,13 @@
         <result column="NAME" property="name" jdbcType="VARCHAR"/>
         <result column="DESCRIPTION" property="description" jdbcType="VARCHAR"/>
         <result column="LOGO" property="logo" jdbcType="VARCHAR"/>
+        <result column="GROUP_ID" property="groupId" jdbcType="BIGINT"/>
         <result column="CREATION_TIME" property="creationTime" jdbcType="TIMESTAMP"/>
+        <result column="DELETED" property="deleted" jdbcType="INTEGER"/>
     </resultMap>
     <!-- 表所有字段 -->
     <sql id="allColumns">
-        ID, `NAME`, DESCRIPTION, LOGO, CREATION_TIME
+        ID, `NAME`, DESCRIPTION, LOGO, GROUP_ID, CREATION_TIME, DELETED
     </sql>
     <!--新增-->
     <insert id="addShop" parameterType="map" useGeneratedKeys="true" keyProperty="id">
@@ -22,7 +24,9 @@
         #{name},
         #{description},
         #{logo},
-        now()
+        #{groupId},
+        now(),
+        0
         )
     </insert>
     <!--详情-->

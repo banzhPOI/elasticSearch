@@ -33,4 +33,11 @@
         FROM `group` WHERE DELETED = 0
         ORDER BY CREATION_TIME DESC
     </select>
+
+    <!--详情-->
+    <select id="findGroupById" resultMap="baseResultMap">
+        SELECT <include refid="allColumns" />
+        FROM `group`
+        WHERE DELETED = 0 AND ID = #{id}
+    </select>
 </mapper>
