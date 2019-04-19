@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 
@@ -16,5 +18,11 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void addGroup(Group group) {
         groupMapper.addGroup(group);
+    }
+
+    @Override
+    public List<Group> findAllGroups() {
+        List<Group> groups = groupMapper.findAllGroups();
+        return groups;
     }
 }

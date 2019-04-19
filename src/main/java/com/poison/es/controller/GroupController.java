@@ -7,6 +7,8 @@ import com.poison.es.service.group.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("rest/groups")
 public class GroupController {
@@ -21,4 +23,10 @@ public class GroupController {
         return ResponseHelper.createSuccessResponse();
     }
 
+    //列表(不分页)
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public Response<?> findAllGroups() {
+        List<Group> groups = groupService.findAllGroups();
+        return ResponseHelper.createSuccessResponse(groups);
+    }
 }

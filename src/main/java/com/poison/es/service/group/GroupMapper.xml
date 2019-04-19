@@ -26,4 +26,11 @@
         0
         )
     </insert>
+
+    <!--列表-->
+    <select id="findAllGroups" resultMap="baseResultMap">
+        SELECT <include refid="allColumns" />
+        FROM `group` WHERE DELETED = 0
+        ORDER BY CREATION_TIME DESC
+    </select>
 </mapper>
