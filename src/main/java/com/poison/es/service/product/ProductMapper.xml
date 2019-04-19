@@ -10,6 +10,8 @@
         <result column="TYPE_ID" property="typeId" jdbcType="INTEGER"/>
         <result column="CREATION_TIME" property="creationTime" jdbcType="TIMESTAMP"/>
         <result column="DELETED" property="deleted" jdbcType="INTEGER"/>
+        <result column="PRICE" property="price" jdbcType="DECIMAL"></result>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"></result>
     </resultMap>
     <!-- 表所有字段 -->
     <sql id="allColumns">
@@ -21,7 +23,7 @@
     </select>
     <!--新增-->
     <insert id="addProduct" parameterType="map" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO product (<include refid="allColumns" />)
+        INSERT INTO product (<include refid="allColumns"/>)
         VALUES (
         #{id},
         #{name},
@@ -32,10 +34,20 @@
         )
     </insert>
     <!-- 批量查找 -->
-    <select id="findByIds" resultMap="baseResultMap" parameterType="list">
+    <select id="findDetailByIdsAndGroupId" resultMap="baseResultMap" parameterType="list">
         SELECT
-        *
-        FROM product WHERE ID IN
+        p.ID,
+        p.`NAME`,
+        p.DESCRIPTION,
+        p.CREATION_TIME,
+        p.TYPE_ID,
+        p.DELETED,
+        pg.PRICE,
+        pg.REMARK
+        FROM
+        product AS p
+        INNER JOIN product_group AS pg ON p.ID = pg.PRODUCT_ID
+        WHERE pg.GROUP_ID=#{groupId} AND p.ID IN
         <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>

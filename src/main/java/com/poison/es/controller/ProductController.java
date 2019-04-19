@@ -17,13 +17,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    //模糊查询获取列表
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public Response<?> findAllProducts(String filter) {
-        List<Product> products = productService.findAllProducts(filter);
-        return ResponseHelper.createSuccessResponse(products);
-    }
-
     //新增
     @RequestMapping(value = "", method = RequestMethod.POST)
     public Response<?> addProduct(@RequestBody Product product) {

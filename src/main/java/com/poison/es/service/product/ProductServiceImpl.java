@@ -3,12 +3,14 @@ package com.poison.es.service.product;
 import com.poison.es.common.error.CodeException;
 import com.poison.es.domain.Product;
 import com.poison.es.domain.ProductGroup;
+import com.poison.es.domain.Shop;
 import com.poison.es.domain.Type;
 import com.poison.es.elasticSearch.ProductES;
 import com.poison.es.elasticSearch.ProductGroupES;
 import com.poison.es.elasticSearch.ProductGroupSearch;
 import com.poison.es.elasticSearch.ProductSearch;
 import com.poison.es.service.productGroup.ProductGroupMapper;
+import com.poison.es.service.shop.ShopMapper;
 import com.poison.es.service.type.TypeMapper;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -42,17 +44,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductGroupMapper productGroupMapper;
     @Autowired
     private ProductGroupSearch productGroupSearch;
-
-    @Override
-    public List<Product> findAllProducts(String filter) {
-        List<Product> products = new ArrayList<>();
-        Iterable<ProductES> iterable = productSearch.findByNameLikeOrDescriptionLike(filter, filter);
-        List<Long> ids = getIds(iterable);
-        if (ids.size() > 0) {
-            products = productMapper.findByIds(ids);
-        }
-        return products;
-    }
+    @Autowired
+    private ShopMapper shopMapper;
 
     private List<Long> getIds(Iterable<ProductES> iterable) {
         List<Long> ids = new ArrayList<>();
@@ -126,18 +119,25 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findProductsByShopId(Long shopId) {
-        QueryBuilder queryBuilder = JoinQueryBuilders.hasChildQuery("productGroup", QueryBuilders.matchQuery("shopId", shopId), ScoreMode.Max);
+        //验证shop存在
+        Shop shop=shopMapper.findShopById(shopId);
+        if (shop==null){
+            throw new CodeException(-1,"商铺不存在或已被删除");
+        }
+        //根据shopId查出groupId
+        Long groupId=shop.getGroupId();
+        QueryBuilder queryBuilder = JoinQueryBuilders.hasChildQuery("productGroup", QueryBuilders.matchQuery("groupId", groupId), ScoreMode.Max);
         Pageable pageable = PageRequest.of(0, 10);
         SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).withPageable(pageable).build();
         searchQuery.addIndices("es");
         searchQuery.addTypes("product");
         Page<ProductES> page = productSearch.search(searchQuery);
-        List<Product> products = makeProductInfo(page);
+        List<Product> products = makeProductInfo(page,groupId);
         //只用es关联查出列表
         return products;
     }
 
-    private List<Product> makeProductInfo(Page<ProductES> page) {
+    private List<Product> makeProductInfo(Page<ProductES> page,Long groupId) {
         List<Product> products = new ArrayList<>();
         List<ProductES> productESs = page.getContent();
         List<Long> ids = new ArrayList<>();
@@ -146,7 +146,7 @@ public class ProductServiceImpl implements ProductService {
             ids.add(id);
         }
         if (ids.size() != 0) {
-            products = productMapper.findByIds(ids);
+            products = productMapper.findDetailByIdsAndGroupId(ids,groupId);
         }
         return products;
     }
