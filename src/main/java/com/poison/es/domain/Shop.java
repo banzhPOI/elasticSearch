@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @ToString
 public class Shop {
+
     private Long id;
     private String name;
     private String description;

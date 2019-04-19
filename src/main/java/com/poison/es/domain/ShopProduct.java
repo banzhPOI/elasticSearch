@@ -11,6 +11,7 @@ import java.util.Date;
 @Setter
 @ToString
 public class ShopProduct {
+
     private Long shopId;
     private Long productId;
     private BigDecimal price;

@@ -11,10 +11,11 @@ import java.util.List;
 @Setter
 @ToString
 public class Product {
+
     private Long id;
     private String name;
     private String description;
     private List<String> pictures;
+    private Long typeId;
     private Date creationTime;
-
 }

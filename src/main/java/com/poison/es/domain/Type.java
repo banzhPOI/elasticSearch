@@ -10,6 +10,7 @@ import java.util.Date;
 @Setter
 @ToString
 public class Type {
+
     private Long id;
     private String name;
     private String description;
