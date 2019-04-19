@@ -83,11 +83,13 @@ public class ProductServiceImpl implements ProductService {
     private List<Product> makeProductInfo(Page<ProductES> page) {
         List<Product>products=new ArrayList<>();
         List<ProductES>productESs=page.getContent();
+        List<Long>ids=new ArrayList<>();
         for (ProductES productES:productESs) {
-            Product product=new Product();
-            product.setName(productES.getName());
-            product.setDescription(productES.getDescription());
-            products.add(product);
+            Long id= Long.valueOf(productES.getId());
+            ids.add(id);
+        }
+        if (ids.size()!=0){
+            products=productMapper.findByIds(ids);
         }
         return products;
     }
