@@ -52,4 +52,9 @@
             #{id}
         </foreach>
     </select>
+    <!--查询数据列表-->
+    <select id="findAllShort" resultMap="baseResultMap">
+        SELECT ID, NAME, DESCRIPTION FROM product
+        WHERE DELETED = 0
+    </select>
 </mapper>

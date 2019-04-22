@@ -22,4 +22,8 @@
             (#{item.productId},#{item.groupId},#{item.price},#{item.remark})
         </foreach>
     </insert>
+    <!--查询数据列表-->
+    <select id="findAllShort" resultMap="baseResultMap">
+        SELECT PRODUCT_ID, GROUP_ID FROM product_group
+    </select>
 </mapper>

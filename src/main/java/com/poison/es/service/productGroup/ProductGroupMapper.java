@@ -11,4 +11,6 @@ import java.util.List;
 public interface ProductGroupMapper {
 
     void addProductGroups(@Param("list") List<ProductGroup> productGroups);
+
+    List<ProductGroup> findAllShort();
 }

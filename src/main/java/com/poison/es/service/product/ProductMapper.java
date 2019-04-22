@@ -14,4 +14,6 @@ public interface ProductMapper {
     void addProduct(Product product);
 
     List<Product> findDetailByIdsAndGroupId(@Param("list") List<Long> ids,@Param("groupId")Long groupId);
+
+    List<Product> findAllShort();
 }
