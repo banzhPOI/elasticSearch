@@ -11,6 +11,7 @@
         <result column="GROUP_ID" property="groupId" jdbcType="BIGINT"/>
         <result column="CREATION_TIME" property="creationTime" jdbcType="TIMESTAMP"/>
         <result column="DELETED" property="deleted" jdbcType="INTEGER"/>
+        <result column="GROUP_NAME" property="groupName" jdbcType="VARCHAR"/>
     </resultMap>
     <!-- 表所有字段 -->
     <sql id="allColumns">
@@ -33,5 +34,20 @@
     <select id="findShopById" resultMap="baseResultMap">
         SELECT <include refid="allColumns" />
         FROM shop WHERE ID = #{id}
+    </select>
+    <!--列表-->
+    <select id="findShopsByFilter" resultMap="baseResultMap">
+        SELECT
+        s.ID,
+        s.`NAME`,
+        s.DESCRIPTION,
+        s.LOGO,
+        s.GROUP_ID,
+        s.CREATION_TIME,
+        s.DELETED,
+        g.`NAME` AS GROUP_NAME
+        FROM
+        shop AS s
+        LEFT JOIN `group` AS g ON s.GROUP_ID = g.ID
     </select>
 </mapper>

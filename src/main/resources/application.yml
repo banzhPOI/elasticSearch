@@ -15,3 +15,6 @@ spring:
   data:
     elasticsearch:
       cluster-nodes: poison1994.cn:9300
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8

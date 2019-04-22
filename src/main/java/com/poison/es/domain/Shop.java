@@ -19,4 +19,7 @@ public class Shop {
     private Long groupId;
     private Date creationTime;
     private Integer deleted;
+
+    //VO
+    private String groupName;
 }

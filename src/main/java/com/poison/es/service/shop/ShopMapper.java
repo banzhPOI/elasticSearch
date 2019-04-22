@@ -4,6 +4,8 @@ import com.poison.es.domain.Shop;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 
 @Mapper
 public interface ShopMapper {
@@ -11,4 +13,6 @@ public interface ShopMapper {
     void addShop(Shop shop);
 
     Shop findShopById(@Param("id") Long id);
+
+    List<Shop> findShopsByFilter(@Param("filter") String filter);
 }

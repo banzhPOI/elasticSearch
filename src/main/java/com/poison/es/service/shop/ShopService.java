@@ -10,4 +10,6 @@ public interface ShopService {
     void addShop(Shop shop);
 
     Shop findShopById(Long id);
+
+    List<Shop> findShopsByFilter(String filter);
 }

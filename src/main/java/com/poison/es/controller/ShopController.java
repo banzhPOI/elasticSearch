@@ -7,6 +7,8 @@ import com.poison.es.service.shop.ShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("rest/shops")
 public class ShopController {
@@ -26,5 +28,11 @@ public class ShopController {
     public Response<?> findShopById(@PathVariable Long id) {
         Shop shop = shopService.findShopById(id);
         return ResponseHelper.createSuccessResponse(shop);
+    }
+    //列表
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public Response<?> findShopsByFilter(String filter) {
+        List<Shop> shops = shopService.findShopsByFilter(filter);
+        return ResponseHelper.createSuccessResponse(shops);
     }
 }
