@@ -26,4 +26,10 @@ public class ElasticsearchController {
         elasticsearchService.check();
         return ResponseHelper.createSuccessResponse();
     }
+    //测试
+    @RequestMapping(value = "test", method = RequestMethod.GET)
+    public Response<?> test() {
+        elasticsearchService.test();
+        return ResponseHelper.createSuccessResponse();
+    }
 }

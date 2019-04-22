@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
         //分组商品价格
         saveProductGroup(product);
         //存es
-        saveProductES(product);
+//        saveProductES(product);
     }
 
     private void saveProductES(Product product) {
@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
         }
         productGroupMapper.addProductGroups(productGroups);
         //存es
-        saveProductGroupES(productGroups);
+//        saveProductGroupES(productGroups);
     }
 
     private void saveProductGroupES(List<ProductGroup> productGroups) {
