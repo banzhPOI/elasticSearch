@@ -12,9 +12,6 @@ spring:
     hikari:
       maximum-pool-size: 20 #连接池同一时间可分配的最大活跃连接数，默认是10
 
-  data:
-    elasticsearch:
-      cluster-nodes: poison1994.cn:9300
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

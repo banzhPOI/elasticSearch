@@ -4,25 +4,23 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
 @Getter
 @Setter
 @ToString
 public class Product {
 
     private Long id;
+    private String Code;
     private String name;
     private String description;
-    private List<String> pictures;
-    private Long typeId;
-    private List<ProductGroup> productGroups;
-    private Date creationTime;
-    private Integer deleted;
-
-    //VO
-    private BigDecimal price;
-    private String remark;
+    private String keywords;
+    private String propertyId;//属性id
+    private String propertyName;//属性名
+    private String brandId;
+    private String brandName;
+    private String categoryId;
+    private String spec;//包装
+    private String dcTemplateId;//小红马商城用
+    private String supplyTemplateId;//平台商家用
+    private String supplierId;//服务商id
 }
