@@ -41,14 +41,14 @@
         product.Spec,
         product.Description,
         keyword.KeyWords,
-        dcprodcut.TemplateId AS DCTemplateId,
+        dcproduct.TemplateId AS DCTemplateId,
         NULL AS SupplyTemplateId,
         NULL AS ServiceSupplierId,
         2 AS ServiceType
         FROM
         biz_dl.biz_tbl_product AS product
         LEFT JOIN biz_dl.biz_tbl_product_keywords AS keyword ON product.Id = keyword.Id
-        INNER JOIN biz_ccb.biz_tbl_customerproduct AS dcprodcut ON product.Id = dcprodcut.ProductId
+        INNER JOIN biz_ccb.biz_tbl_customerproduct AS dcproduct ON product.Id = dcproduct.ProductId
         INNER JOIN biz_dl.biz_tbl_brand AS brand ON product.BrandId = brand.Id
         INNER JOIN biz_dl.biz_tbl_product_category AS category ON product.CategoryId = category.Id
         AND category.VisibleInCCB = 1
