@@ -4,5 +4,4 @@ public interface ElasticsearchService {
 
     void check();
 
-    void test();
 }

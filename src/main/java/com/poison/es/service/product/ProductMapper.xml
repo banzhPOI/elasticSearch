@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- role -->
+<mapper namespace="com.poison.es.service.product.ProductMapper">
+    <!-- 结果映射 -->
+    <resultMap id="baseResultMap" type="com.poison.es.domain.Product">
+        <id column="Id" property="id" jdbcType="BIGINT"/>
+        <result column="Code" property="code" jdbcType="VARCHAR"/>
+        <result column="Name" property="name" jdbcType="VARCHAR"/>
+        <result column="CategoryId" property="categoryId" jdbcType="BIGINT"/>
+        <result column="BrandId" property="brandId" jdbcType="BIGINT"/>
+        <result column="BrandName" property="brandName" jdbcType="VARCHAR"/>
+        <result column="Property1Id" property="propertyId" jdbcType="BIGINT"/>
+        <result column="PropertyName" property="propertyName" jdbcType="VARCHAR"/>
+        <result column="Spec" property="spec" jdbcType="VARCHAR"/>
+        <result column="Description" property="description" jdbcType="VARCHAR"/>
+        <result column="KeyWords" property="keywords" jdbcType="VARCHAR"/>
+        <result column="ServiceType" property="serviceType" jdbcType="INTEGER"/>
+        <collection property="dcTemplateId" ofType="Long" javaType="java.util.ArrayList">
+            <result column="DCTemplateId"  jdbcType="BIGINT"/>
+        </collection>
+        <collection property="supplyTemplateId" ofType="Long" javaType="java.util.ArrayList">
+            <result column="SupplyTemplateId" jdbcType="BIGINT"/>
+        </collection>
+        <collection property="serviceSupplierId" ofType="Long" javaType="java.util.ArrayList">
+            <result column="ServiceSupplierId"  jdbcType="BIGINT"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAllProducts" resultMap="baseResultMap">
+        (
+        SELECT
+        product.Id,
+        product.`Code`,
+        product.`Name`,
+        product.CategoryId,
+        product.BrandId,
+        brand.`Name` AS BrandName,
+        product.Property1Id,
+        property.`Name` AS PropertyName,
+        product.Spec,
+        product.Description,
+        keyword.KeyWords,
+        dcprodcut.TemplateId AS DCTemplateId,
+        NULL AS SupplyTemplateId,
+        NULL AS ServiceSupplierId,
+        2 AS ServiceType
+        FROM
+        biz_dl.biz_tbl_product AS product
+        LEFT JOIN biz_dl.biz_tbl_product_keywords AS keyword ON product.Id = keyword.Id
+        INNER JOIN biz_ccb.biz_tbl_customerproduct AS dcprodcut ON product.Id = dcprodcut.ProductId
+        INNER JOIN biz_dl.biz_tbl_brand AS brand ON product.BrandId = brand.Id
+        INNER JOIN biz_dl.biz_tbl_product_category AS category ON product.CategoryId = category.Id
+        AND category.VisibleInCCB = 1
+        INNER JOIN biz_dl.biz_tbl_product_property AS property ON product.Property1Id = property.Id
+        WHERE
+        product.UseStatus &lt;= 100
+        ) UNION
+        (
+        SELECT
+        product.Id,
+        product.`Code`,
+        product.`Name`,
+        product.CategoryId,
+        product.BrandId,
+        brand.`Name` AS BrandName,
+        product.Property1Id,
+        property.`Name` AS PropertyName,
+        product.Spec,
+        product.Description,
+        keyword.KeyWords,
+        NULL AS DCTemplaetId,
+        NULL AS SupplierTemplaetId,
+        serviceproduct.SupplierId AS ServiceSupplierId,
+        1 AS ServiceType
+        FROM
+        biz_tbl_product AS product
+        LEFT JOIN biz_tbl_product_keywords AS keyword ON product.Id = keyword.Id
+        INNER JOIN biz_tbl_product_supply AS serviceproduct ON product.Id = serviceproduct.ProductId
+        INNER JOIN biz_tbl_brand AS brand ON product.BrandId = brand.Id
+        INNER JOIN biz_tbl_product_category AS category ON product.CategoryId = category.Id
+        AND category.VisibleInCCB = 1
+        INNER JOIN biz_dl.biz_tbl_product_property AS property ON product.Property1Id = property.Id
+        INNER JOIN biz_tbl_supplier AS supplier ON serviceproduct.SupplierId = supplier.Id
+        AND supplier.IsService = 1
+        WHERE
+        product.UseStatus &lt;= 100
+        ) UNION
+        (
+        SELECT
+        product.Id,
+        product.`Code`,
+        product.`Name`,
+        product.CategoryId,
+        product.BrandId,
+        brand.`Name` AS BrandName,
+        product.Property1Id,
+        property.`Name` AS PropertyName,
+        product.Spec,
+        product.Description,
+        keyword.KeyWords,
+        NULL AS DCTemplaetId,
+        supplyproduct.TemplateId AS SupplyTemplateId,
+        NULL AS ServiceSupplierId,
+        0 AS ServiceType
+        FROM
+        biz_dl.biz_tbl_product AS product
+        LEFT JOIN biz_dl.biz_tbl_product_keywords AS keyword ON product.Id = keyword.Id
+        INNER JOIN biz_ccb.biz_tbl_customersupplyproduct AS supplyproduct ON product.Id = supplyproduct.ProductId
+        INNER JOIN biz_dl.biz_tbl_brand AS brand ON product.BrandId = brand.Id
+        INNER JOIN biz_dl.biz_tbl_product_property AS property ON product.Property1Id = property.Id
+        INNER JOIN biz_dl.biz_tbl_product_category AS category ON product.CategoryId = category.Id
+        AND category.VisibleInCCB = 1
+        WHERE
+        product.UseStatus &lt;= 100
+        )
+    </select>
+</mapper>
